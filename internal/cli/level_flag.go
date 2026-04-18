@@ -50,3 +50,9 @@ func parseLevelFlags(vals []string) ([]LevelRange, error) {
 	}
 	return out, nil
 }
+
+// String returns the canonical string representation of a LevelRange,
+// suitable for use as a CLI flag value.
+func (lr LevelRange) String() string {
+	return fmt.Sprintf("%s:%s:%s", lr.Field, lr.MinLevel, lr.MaxLevel)
+}
