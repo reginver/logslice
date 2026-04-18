@@ -61,3 +61,10 @@ func TestRegexFilter_Match_NonStringField(t *testing.T) {
 		t.Error("expected match on numeric field formatted as string")
 	}
 }
+
+func TestRegexFilter_Match_EmptyStringField(t *testing.T) {
+	f, _ := NewRegexFilter("msg", `^$`)
+	if !f.Match(entry(map[string]any{"msg": ""})) {
+		t.Error("expected match on empty string field")
+	}
+}
