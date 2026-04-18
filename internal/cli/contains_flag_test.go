@@ -63,3 +63,10 @@ func TestParseContainsPair_SingleValue(t *testing.T) {
 		t.Errorf("unexpected values: %v", p.Values)
 	}
 }
+
+func TestParseContainsPairs_InvalidEntry(t *testing.T) {
+	_, err := parseContainsPairs([]string{"level=error", "badentry"})
+	if err == nil {
+		t.Error("expected error for invalid entry in list")
+	}
+}
