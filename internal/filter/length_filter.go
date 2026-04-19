@@ -48,3 +48,17 @@ func (f *LengthFilter) Match(e parser.LogEntry) bool {
 	}
 	return true
 }
+
+// String returns a human-readable description of the filter.
+func (f *LengthFilter) String() string {
+	switch {
+	case f.min == -1 && f.max == -1:
+		return fmt.Sprintf("length(%s: unbounded)", f.field)
+	case f.min == -1:
+		return fmt.Sprintf("length(%s: <= %d)", f.field, f.max)
+	case f.max == -1:
+		return fmt.Sprintf("length(%s: >= %d)", f.field, f.min)
+	default:
+		return fmt.Sprintf("length(%s: %d..%d)", f.field, f.min, f.max)
+	}
+}
