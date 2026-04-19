@@ -39,6 +39,9 @@ func parseSubstringPair(pair string) (SubstringSpec, error) {
 	if substring == "" {
 		return SubstringSpec{}, fmt.Errorf("substring flag: substring must not be empty in %q", pair)
 	}
+	if len(parts) == 3 && strings.ToLower(parts[2]) != "i" {
+		return SubstringSpec{}, fmt.Errorf("substring flag: unrecognized modifier %q in %q (only \"i\" is supported)", parts[2], pair)
+	}
 	caseFold := len(parts) == 3 && strings.ToLower(parts[2]) == "i"
 	return SubstringSpec{Field: field, Substring: substring, CaseFold: caseFold}, nil
 }
