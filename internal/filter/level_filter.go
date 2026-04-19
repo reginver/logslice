@@ -68,3 +68,18 @@ func (f *LevelFilter) Match(e parser.LogEntry) bool {
 	}
 	return v >= f.minLevel && v <= f.maxLevel
 }
+
+// String returns a human-readable description of the filter's configured range.
+func (f *LevelFilter) String() string {
+	// Reverse-lookup level names for display.
+	minName, maxName := "", ""
+	for name, v := range levelOrder {
+		if v == f.minLevel {
+			minName = name
+		}
+		if v == f.maxLevel {
+			maxName = name
+		}
+	}
+	return fmt.Sprintf("LevelFilter{field:%q, min:%s, max:%s}", f.field, minName, maxName)
+}
