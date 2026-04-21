@@ -16,6 +16,18 @@ const (
 	FormatText
 )
 
+// String returns a human-readable name for the Format.
+func (f Format) String() string {
+	switch f {
+	case FormatJSON:
+		return "json"
+	case FormatText:
+		return "text"
+	default:
+		return "unknown"
+	}
+}
+
 // DetectFormat peeks at the first non-empty line of r to determine whether
 // the input looks like JSON or plain text. It returns the detected Format and
 // a new reader that includes the consumed bytes so callers can still read the
