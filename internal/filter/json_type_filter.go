@@ -39,20 +39,26 @@ func (f *jsonTypeFilter) Match(e parser.LogEntry) bool {
 	if !ok {
 		return f.expected == "null"
 	}
+	return jsonTypeOf(val) == f.expected
+}
+
+// jsonTypeOf returns the JSON type name for a value decoded from a JSON object.
+// It mirrors the type set supported by jsonTypeFilter.
+func jsonTypeOf(val interface{}) string {
 	switch val.(type) {
 	case nil:
-		return f.expected == "null"
+		return "null"
 	case string:
-		return f.expected == "string"
+		return "string"
 	case float64:
-		return f.expected == "number"
+		return "number"
 	case bool:
-		return f.expected == "bool"
+		return "bool"
 	case []interface{}:
-		return f.expected == "array"
+		return "array"
 	case map[string]interface{}:
-		return f.expected == "object"
+		return "object"
 	default:
-		return false
+		return ""
 	}
 }
