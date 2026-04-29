@@ -39,3 +39,35 @@ func Print(w io.Writer, s Summary) {
 
 	tw.Flush()
 }
+
+// Fprint writes a human-readable summary to w and returns any error encountered.
+// Unlike Print, it propagates flush errors to the caller.
+func Fprint(w io.Writer, s Summary) error {
+	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
+
+	fmt.Fprintln(tw, "--- Log Slice Summary ---")
+	fmt.Fprintf(tw, "Total lines:\t%d\n", s.TotalLines)
+	fmt.Fprintf(tw, "Matched lines:\t%d\n", s.MatchedLines)
+	fmt.Fprintf(tw, "Skipped lines:\t%d\n", s.SkippedLines)
+
+	if s.EarliestTime != nil {
+		fmt.Fprintf(tw, "Earliest match:\t%s\n", s.EarliestTime.UTC().Format(timeLayout))
+	}
+	if s.LatestTime != nil {
+		fmt.Fprintf(tw, "Latest match:\t%s\n", s.LatestTime.UTC().Format(timeLayout))
+	}
+
+	if len(s.FieldCounts) > 0 {
+		fmt.Fprintln(tw, "\nField value counts:")
+		keys := make([]string, 0, len(s.FieldCounts))
+		for k := range s.FieldCounts {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			fmt.Fprintf(tw, "  %s:\t%d\n", k, s.FieldCounts[k])
+		}
+	}
+
+	return tw.Flush()
+}
