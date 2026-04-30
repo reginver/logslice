@@ -34,6 +34,20 @@ func TestNewRangeFilter_MinGreaterThanMax(t *testing.T) {
 	}
 }
 
+func TestNewRangeFilter_MinEqualMax(t *testing.T) {
+	// A range where min == max should be valid and match only that exact value.
+	f, err := NewRangeFilter("score", 42, 42)
+	if err != nil {
+		t.Fatalf("unexpected error for min == max: %v", err)
+	}
+	if !f.Match(numEntry("score", float64(42))) {
+		t.Error("expected match when value equals min == max")
+	}
+	if f.Match(numEntry("score", float64(43))) {
+		t.Error("expected no match when value is outside min == max range")
+	}
+}
+
 func TestRangeFilter_Match_Float64(t *testing.T) {
 	f, _ := NewRangeFilter("latency", 10, 200)
 	if !f.Match(numEntry("latency", float64(50))) {
